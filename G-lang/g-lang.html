@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>.g - Minimalist Systems Language</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #ffffff;
+            --text: #1a1a1a;
+            --text-secondary: #666666;
+            --accent: #5e60ce;
+            --border: #dddddd;
+            --card-bg: #f9f9f9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        header {
+            padding: 4rem 0;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .logo {
+            width: 120px;
+            margin: 0 auto 2rem;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        section {
+            padding: 4rem 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out forwards;
+            animation-delay: 0.3s;
+        }
+
+        section:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        section:nth-child(3) {
+            animation-delay: 0.7s;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            color: var(--text);
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .code {
+            font-family: 'Fira Code', monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-left: 3px solid var(--accent);
+        }
+
+        .btn {
+            display: inline-block;
+            background: transparent;
+            color: var(--accent);
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--accent);
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            background: rgba(79, 201, 120, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            border-color: var(--text-secondary);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(160, 160, 160, 0.1);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            padding: 1.5rem;
+            border-left: 2px solid var(--accent);
+        }
+
+        .feature-item h3 {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .feature-item p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            margin-top: 4rem;
+        }
+
+        .made-with {
+            margin-top: 4rem;
+        }
+
+        .snippet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .snippet {
+            background: var(--card-bg);
+            border-radius: 6px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .snippet pre {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        .snippet-title {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Feedback button */
+        .feedback-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--accent);
+            color: var(--bg);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .feedback-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid var(--border);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        form input,
+        form textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+        }
+
+        form textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .version-badge {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: var(--accent);
+            color: var(--bg);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            z-index: 100;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav
+        style="background:#ffffff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #dddddd;">
+        <div style="font-weight:bold;color:#1a1a1a;">.g Language</div>
+        <div style="display:flex;gap:1.5rem;">
+            <a href="/index.html" style="color:#666;text-decoration:none;">Home</a>
+            <a href="#" id="aboutBtn" style="color:#666;text-decoration:none;">About</a>
+            <a href="/Main/contact.html" style="color:#666;text-decoration:none;">Contact</a>
+            <a href="#" style="color:#666;text-decoration:none;">ㅤㅤ</a>
+        </div>
+    </nav>
+
+    <div class="version-badge" id="versionBadge">v1.0.0</div>
+    </div>
+
+    <div class="modal" id="aboutModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeAboutModal">&times;</span>
+            <h2>About .g Language</h2>
+            <p style="margin-top: 1rem; color: var(--text-secondary); line-height: 1.6;">
+                <strong>.g</strong> is a minimalist programming language created by <strong>Gurjotpal Singh</strong>,
+                designed for simplicity, performance, and scripting power.
+                <br><br>
+                While most features are fully working, this project is still under active development — some modules or
+                functions may not work as expected. Please stay tuned for updates, and feel free to suggest
+                improvements!
+                <br><br>
+                You can explore demos, read the official handbook, or contribute ideas using the feedback button below.
+            </p>
+        </div>
+    </div>
+
+
+    <div class="modal" id="changelogModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeChangelog">&times;</span>
+            <h2>Changelog v1.0.0</h2>
+            <ul style="margin-left: 1.5rem; margin-top: 1rem; color: var(--text-secondary);">
+                <li style="margin-bottom: 0.5rem;">Initial release of .g language</li>
+                <li style="margin-bottom: 0.5rem;">Standard library std@1.0</li>
+                <li style="margin-bottom: 0.5rem;">CLI tool with file execution</li>
+                <li style="margin-bottom: 0.5rem;">Documentation handbook</li>
+            </ul>
+            <button class="btn" style="margin-top: 1.5rem;" id="closeChangelogBtn">Close</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <svg width="120" height="120" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="240" height="240" rx="20" fill="#ffffff" />
+                    <text x="40" y="140" font-family="monospace" font-size="100" fill="#666666">[</text>
+                    <text x="170" y="140" font-family="monospace" font-size="100" fill="#666666">]</text>
+                    <text x="90" y="140" font-family="monospace" font-size="80" fill="#1a1a1a">.g</text>
+                    <rect x="10" y="10" width="220" height="220" rx="18" fill="none" stroke="#dddddd"
+                        stroke-width="2" />
+                </svg>
+            </div>
+            <h1>.g language</h1>
+            <p class="subtitle">A minimalist systems programming language with clean syntax and powerful abstractions.
+            </p>
+        </header>
+
+        <section>
+            <h2>Installation</h2>
+            <div class="card">
+                <p>Install the .g compiler and CLI tool globally via npm:</p>
+                <div class="code">npm install -g @singhgurjot/g-lang</div>
+                <p>Verify the installation:</p>
+                <div class="code">g --version</div>
+                <a href="https://github.com/SinghGurjot01-Code" class="btn">Download for Other Platforms</a>
+            </div>
+        </section>
+
+        <section>
+            <h2>Getting Started</h2>
+            <div class="card">
+                <h3>Running .g files</h3>
+                <p>Create a file with <code>.g</code> extension and run it with:</p>
+                <div class="code">g run filename.g</div>
+
+                <h3 style="margin-top: 2rem;">Standard Library</h3>
+                <p>The std@1.0 library comes with essential modules:</p>
+                <div class="code">
+                    // Import standard library modules
+                    import io from std@1.0
+                    import math from std@1.0
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <a href="/Services/G-lang/Books/g Language – The .g Programming Handbook.pdf" class="btn">Download Handbook
+                        (PDF)</a>
+                    <a href="/Services/G-lang/Books/g Language – The .g Programming Handbook (1).docx"
+                        class="btn btn-secondary">Handbook (DOCX)</a>
+                </div>
+            </div>
+        </section>
+
+
+        <section>
+            <h2>Core Features</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h3>Simple Syntax</h3>
+                    <p>No semicolons, no bloat. Just pure logic in readable lines.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Built-in CLI Tools</h3>
+                    <p>Create, run, and chain scripts easily with the <code>g</code> CLI.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Standard Library</h3>
+                    <p>Modular standard library with file I/O, math, strings, and HTTP support.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Error Handling</h3>
+                    <p>Use try/catch for runtime errors. Debug smarter, not harder.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Array & Object Support</h3>
+                    <p>Work with structured data like arrays and objects easily.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Cross-Platform</h3>
+                    <p>Install once. Run anywhere. Powered by Node.js and JavaScript.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="made-with">
+            <h2>Made with .g</h2>
+            <p>Small projects and tools built with .g language</p>
+
+            <div class="snippet-grid">
+                <div class="snippet">
+                    <div class="snippet-title">File Organizer</div>
+                    <pre>
+// Organize files by extension
+import fs from std@1.0
+import path from std@1.0
+
+for file in fs.readDir(".") {
+    if path.isFile(file) {
+        ext = path.extname(file)
+        fs.mkdir(ext) unless fs.exists(ext)
+        fs.move(file, path.join(ext, file))
+    }
+}</pre>
+                </div>
+
+                <div class="snippet">
+                    <div class="snippet-title">Web Server</div>
+                    <pre>
+// Simple HTTP server
+import net from std@1.0
+
+server = net.createServer(req, res) {
+    res.writeHead(200)
+    res.end("Hello from .g!")
+}
+
+server.listen(8080)</pre>
+                </div>
+
+                <div class="snippet">
+                    <div class="snippet-title">CLI Calculator</div>
+                    <pre>
+// Command-line calculator
+import math from std@1.0
+import io from std@1.0
+
+args = cli.args
+if args.length != 3 {
+    say "Usage: calc num op num"
+    cli.exit(1)
+}
+
+a = args[0].toNumber()
+op = args[1]
+b = args[2].toNumber()
+
+result = match op {
+    "+" => a + b
+    "-" => a - b
+    // ... other ops
+}
+
+say result</pre>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2025 .g language project. All rights reserved.<br>Designed & hosted by <strong>Gurjot</strong></p>
+        </footer>
+    </div>
+
+    <script>
+    // Animation on load
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof gsap !== 'undefined') {
+            gsap.from('header', {
+                opacity: 0,
+                y: -20,
+                duration: 1,
+                ease: 'power3.out'
+            });
+
+            gsap.utils.toArray('section').forEach((section, i) => {
+                gsap.from(section, {
+                    opacity: 0,
+                    y: 30,
+                    duration: 0.8,
+                    delay: 0.3 + i * 0.2,
+                    ease: 'power2.out'
+                });
+            });
+
+            // Scroll animations
+            gsap.utils.toArray('.card, .feature-item').forEach((el, i) => {
+                gsap.from(el, {
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 80%'
+                    },
+                    opacity: 0,
+                    y: 30,
+                    duration: 0.6,
+                    delay: i * 0.1,
+                    ease: 'power2.out'
+                });
+            });
+        }
+    });
+
+    // Modal functionality
+    const closeModal = document.getElementById('closeModal');
+    const versionBadge = document.getElementById('versionBadge');
+    const changelogModal = document.getElementById('changelogModal');
+    const closeChangelog = document.getElementById('closeChangelog');
+    const closeChangelogBtn = document.getElementById('closeChangelogBtn');
+    const aboutBtn = document.getElementById('aboutBtn');
+    const aboutModal = document.getElementById('aboutModal');
+    const closeAboutModal = document.getElementById('closeAboutModal');
+
+    feedbackBtn.addEventListener('click', () => {
+        feedbackModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    });
+
+    aboutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        aboutModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    });
+
+    closeAboutModal.addEventListener('click', () => {
+        aboutModal.classList.remove('show');
+        document.body.style.overflow = '';
+    });
+
+    closeModal.addEventListener('click', () => {
+        feedbackModal.classList.remove('show');
+        document.body.style.overflow = '';
+    });
+
+    versionBadge.addEventListener('click', () => {
+        changelogModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    });
+
+    closeChangelog.addEventListener('click', () => {
+        changelogModal.classList.remove('show');
+        document.body.style.overflow = '';
+    });
+
+    closeChangelogBtn.addEventListener('click', () => {
+        changelogModal.classList.remove('show');
+        document.body.style.overflow = '';
+    });
+
+    // Feedback form (optional: prevent default and show thank you)
+    const feedbackForm = document.getElementById('feedbackForm');
+    if (feedbackForm) {
+        feedbackForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            document.getElementById('feedbackThanks').style.display = 'block';
+            feedbackForm.style.display = 'none';
+        });
+    }
+    </script>
+</body>
+
+</html>
